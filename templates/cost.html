@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+        <div class="content-section">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset="form-group">
+                    <legend class="border-bottom mb-4">SLM 280HL</legend>
+                    <div class="form-group">
+                        {{ form.customer.label(class="form-control-label") }}
+                        { form.customer(class="form-control form control-lg") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.layer_thickness.label(class="form-control-label") }}
+                        { form.layer_thickness(class="form-control form control-lg") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.part_volume.label(class="form-control-label") }}
+                        { form.part_volume(class="form-control form control-lg") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.support_volume.label(class="form-control-label") }}
+                        { form.support_volume(class="form-control form control-lg") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.part_surface_area.label(class="form-control-label") }}
+                        { form.part_surface_area(class="form-control form control-lg") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.number_parts.label(class="form-control-label") }}
+                        { form.number_parts(class="form-control form control-lg") }}
+                    </div>
+                     <div class="form-group">
+                        {{ material.label(class="form-control-label") }}
+                        { material(class="form-control form control-lg") }}
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+            </form>
+        </div>
+{% endblock content %}

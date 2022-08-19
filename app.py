@@ -27,9 +27,10 @@ def about():  # put application's code here
 if __name__ == '__main__':
     app.run()
 
-@app.route('/about')
-def about():  # put application's code here
-    return render_template('about.html', title='about')
+@app.route('/cost')
+def cost():  # put application's code here
+    form = CostForm()
+    return render_template('cost.html', title='Register', form=form)
 
 
 if __name__ == '__main__':
