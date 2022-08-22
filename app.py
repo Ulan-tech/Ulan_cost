@@ -30,7 +30,7 @@ if __name__ == '__main__':
 @app.route('/cost')
 def cost():  # put application's code here
     form = CostForm()
-    return render_template('cost.html', title='Register', form=form)
+    return render_template('cost.html', title='cost', form=form)
 
 
 if __name__ == '__main__':
