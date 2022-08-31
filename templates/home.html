@@ -1,5 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
-{#        <p1>{{ dropdown.html}}</p1>#}
     <h1>SLM cost estimation @KITECH</h1>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Material type
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Inconel/a>
+          <a class="dropdown-item" href="#">Maraging steel</a>
+          <a class="dropdown-item" href="#">SS316L</a>
+          <a class="dropdown-item" href="#">Ti Grade 2</a>
+          <a class="dropdown-item" href="#">Ti64</a>
+        </div>
+      </div>
 {% endblock content %}
