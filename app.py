@@ -1,24 +1,18 @@
-from flask import Flask, render_template, url_for
-from forms import CostForm
-
+from flask import Flask, render_template, request
 app = Flask(__name__)
-
-posts = [
-    {
-        'material': 'maraging steel',
-        'number_layers': '450',
-        'product': 'bracket'
-    },
-    {
-        'material': 'ti64',
-        'number_layers': '400',
-        'product': 'plate'
-    }
-]
+app.debug = True
 
 @app.route('/')
 def hello_world():  # put application's code here
-    return render_template('home.html', posts=posts)
+    return render_template('home.html')
+
+@app.route('/')
+def home():  # put application's code here
+    return render_template('dropdown.html')
+
+if __name__ == "__main__":
+    app.run()
+
 
 @app.route('/about')
 def about():  # put application's code here
@@ -26,12 +20,3 @@ def about():  # put application's code here
 
 if __name__ == '__main__':
     app.run()
-
-@app.route('/cost')
-def cost():  # put application's code here
-    form = CostForm()
-    return render_template('cost.html', title='cost', form=form)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
