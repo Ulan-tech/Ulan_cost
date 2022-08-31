@@ -18,7 +18,7 @@ class CostForm(FlaskForm):
 
     material = StringField('Material', validators=[DataRequired(), Length(min=2, max=20)])
 
-    final_cost = SubmitField('USD')
+    final_cost = SubmitField('Calculate the cost')
 
 
 
