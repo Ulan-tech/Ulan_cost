@@ -2,34 +2,198 @@
 {% block content %}
     <h1>SLM cost estimation @KITECH</h1>
     <form action="{{ url_for('cost') }}" method="post">
+
+        <div class="form-row align-items-center">
+            <div class="col-auto my-1">
+              <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
+              <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                <option selected>Material type...</option>
+                <option value="inconel">Inconel</option>
+                <option value="maraging_steel">Maraging steel</option>
+                <option value="ss316l">SS316L</option>
+                <option value="ti_grade64">Ti Grade 2</option>
+                <option value="ti64">Ti6Al4V</option>
+
+              </select>
+        </div>
+
+
       <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Material type
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Inconel/a>
-            <a class="dropdown-item" href="#">Maraging steel</a>
-            <a class="dropdown-item" href="#">SS316L</a>
-            <a class="dropdown-item" href="#">Ti Grade 2</a>
-            <a class="dropdown-item" href="#">Ti64</a>
-          </div>
-          <label for="firstname">First Name:</label>
-          <input name="customer" label="customer">
-          <button type="submit">Calculate</button>
+{#          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#            Material type#}
+{#          </button>#}
+{#          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">#}
+{#            <a class="dropdown-item" href="#">Inconel</a>#}
+{#            <a class="dropdown-item" href="#">Maraging steel</a>#}
+{#            <a class="dropdown-item" href="#">SS316L</a>#}
+{#            <a class="dropdown-item" href="#">Ti Grade 2</a>#}
+{#            <a class="dropdown-item" href="#">Ti64</a>#}
+{#          </div>#}
+{#          <label for="firstname">Customer:</label>#}
+{#          <input name="customer" label="customer">#}
+{##}
+{#          <label for="firstname">Layer thickness:</label>#}
+{#          <input name="customer" label="customer">#}
+{##}
+{#          <label for="firstname">Hatch distance</label>#}
+{#          <input name="customer" label="customer">#}
+{##}
+{#          <label for="firstname">Number of layers</label>#}
+{#          <input name="customer" label="customer">#}
+{##}
+{#          <label for="firstname">Scan speed</label>#}
+{#          <input name="customer" label="customer">#}
+
+{#          <button type="submit">Calculate</button>#}
+
+  {#      Process parameter based#}
+
+   <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Customer </label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" id="inputEmail3" placeholder="">
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Hatch distance</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="inputEmail3" placeholder="in microns">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Number of layers</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="inputEmail3" placeholder=" ">
+    </div>
+  </div>
+
+
+   <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Scan speed</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="inputEmail3" placeholder="mm/sec">
+    </div>
+  </div>
+
+  <fieldset
+
+  class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-2 pt-0">Layer thickness</legend>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+          <label class="form-check-label" for="gridRadios1">
+            30\u03BC
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+          <label class="form-check-label" for="gridRadios2">
+            50um
+          </label>
+        </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+
+
+
+{#      Part design feature based#}
+
+    <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Part volume</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="inputEmail3" placeholder="mm3">
+    </div>
+  </div>
+
+    <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Support volume</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="inputEmail3" placeholder="mm3">
+    </div>
+  </div>
+
+    <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Bounding box volume</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="inputEmail3" placeholder="mm3">
+    </div>
+  </div>
+
+    <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Part surface area</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="inputEmail3" placeholder="mm2">
+    </div>
+  </div>
+
+    <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Number of parts</label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="inputEmail3" placeholder="">
+    </div>
+  </div>
+
+
+    <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Max build height </label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="inputEmail3" placeholder="of this build job (mm)">
+    </div>
+  </div>
+
+
+    <div class="form-group row">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Number of different parts </label>
+    <div class="col-sm-10">
+      <input type="number" class="form-control" id="inputEmail3" placeholder="">
+    </div>
+  </div>
+
+{#      Post-processing#}
+
+ <div class="form-group row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-10">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="gridCheck1">
+        <label class="form-check-label" for="gridCheck1">
+          Wire cutting
+        </label>
+      </div>
+    </div>
+  </div>
+
+
+
+ <div class="form-group row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-10">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="gridCheck1">
+        <label class="form-check-label" for="gridCheck1">
+          Heat treatment
+        </label>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary">Calculate</button>
+    </div>
+  </div>
+
+
       </form>
-      <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-      </div>
-      <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
+
 {% endblock content %}
