@@ -31,7 +31,8 @@ material_type = {
 #Material type
 
 #%% Input material type and number of different parts:
-m_type, different_parts = 'ti64', 2
+m_type = input("Choose material type: ")
+different_parts =int(input("How many different parts are there? (related to Add parts button"))
 mat_cost = material_type.__getitem__(m_type)
 c_machine = t_build * c_machrate
 
