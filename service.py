@@ -6,7 +6,7 @@ class PartInfoModel:
     def __init__(self):
         self.conn = sqlite3.connect('slm.db')
 
-    def create(self, customer, layer_thickness, part_volume, support_volume, part_surface_area, number_parts, material, final_cost):
+    def insert(self, customer, layer_thickness, part_volume, support_volume, part_surface_area, number_parts, material, final_cost):
         query = f"""insert into {self.TABLENAME} """\
                 f"""(
                         customer, 

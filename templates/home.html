@@ -4,16 +4,16 @@
 <form action="{{ url_for('cost') }}" method="post">
 
   <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-2 col-form-label">Customer</label>
+    <label class="col-sm-2 col-form-label">Customer</label>
     <div class="col-sm-5">
-      <input type="email" class="form-control" id="inputEmail3" placeholder="">
+      <input name="customer" class="form-control" placeholder="Please write your name">
     </div>
   </div>
   <div class="form-group row align-items-center">
-    <label for="inputEmail3" class="col-sm-2 col-form-label">Material Type</label>
+    <label  class="col-sm-2 col-form-label">Material Type</label>
     <div class="col-auto my-1">
       <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
-      <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+      <select name="material_type" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
         <option selected>Material type...</option>
         <option value="inconel">Inconel</option>
         <option value="maraging_steel">Maraging steel</option>
@@ -24,38 +24,38 @@
     </div>
   </div>
   <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-2 col-form-label">Overall Build Time</label>
+    <label class="col-sm-2 col-form-label">Overall Build Time</label>
     <div class="col-sm-5">
-      <input type="number" class="form-control" id="inputEmail3" placeholder="">
+      <input name="build_time" type="number" class="form-control" placeholder="">
     </div>
   </div>
 
   {# Process parameter based#}
   <div class="form-group row">
     <div class="col">
-      <label for="inputEmail3" class="row-sm-2 col-form-label">Hatch distance</label>
+      <label class="row-sm-2 col-form-label">Hatch distance</label>
       <div class="row-sm-10">
-        <input type="number" class="form-control" id="inputEmail3" placeholder="in microns">
+        <input name="hatch_distance" type="number" class="form-control"  placeholder="in microns">
       </div>
-      <label for="inputEmail3" class="row-sm-2 col-form-label">Number of layers</label>
+      <label  class="row-sm-2 col-form-label">Number of layers</label>
       <div class="row-sm-10">
-        <input type="number" class="form-control" id="inputEmail3" placeholder=" ">
+        <input name="num_of_layers" type="number" class="form-control"  placeholder=" ">
       </div>
-      <label for="inputEmail3" class="row-sm-2 col-form-label">Scan speed</label>
+      <label  class="row-sm-2 col-form-label">Scan speed</label>
       <div class="row-sm-10">
-        <input type="number" class="form-control" id="inputEmail3" placeholder="mm/sec">
+        <input name="scan_speed" type="number" class="form-control"  placeholder="mm/sec">
       </div>
       <fieldset class="form-group">
         <legend class="col-form-label col-sm-7.5 pt-0">Layer thickness</legend>
         <div class="row-sm-10">
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+            <input class="form-check-input" type="radio" name="layer_thickness" id="gridRadios1" value="option1" checked>
             <label class="form-check-label" for="gridRadios1">
               30um
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+            <input class="form-check-input" type="radio" name="layer_thickness" id="gridRadios2" value="option2">
             <label class="form-check-label" for="gridRadios2">
               50um
             </label>
@@ -66,35 +66,35 @@
 
     {# Part design feature based#}
     <div class="col">
-      <label for="inputEmail3" class="row-sm-2 col-form-label">Part volume</label>
+      <label  class="row-sm-2 col-form-label">Part volume</label>
       <div class="row-sm-10">
-        <input type="number" class="form-control" id="inputEmail3" placeholder="mm3">
+        <input name="part_volume" type="number" class="form-control"  placeholder="mm3">
       </div>
-      <label for="inputEmail3" class="row-sm-2 col-form-label">Support volume</label>
+      <label  class="row-sm-2 col-form-label">Support volume</label>
       <div class="row-sm-10">
-        <input type="number" class="form-control" id="inputEmail3" placeholder="mm3">
+        <input name="support_volume" type="number" class="form-control"  placeholder="mm3">
       </div>
-      <label for="inputEmail3" class="row-sm-2 col-form-label">Bounding box volume</label>
+      <label  class="row-sm-2 col-form-label">Bounding box volume</label>
       <div class="row-sm-10">
-        <input type="number" class="form-control" id="inputEmail3" placeholder="mm3">
+        <input name="box_volume" type="number" class="form-control"  placeholder="mm3">
       </div>
-      <label for="inputEmail3" class="row-sm-2 col-form-label">Part surface area</label>
+      <label  class="row-sm-2 col-form-label">Part surface area</label>
       <div class="row-sm-10">
-        <input type="number" class="form-control" id="inputEmail3" placeholder="mm2">
+        <input name="surface_area" type="number" class="form-control"  placeholder="mm2">
       </div>
-      <label for="inputEmail3" class="row-sm-2 col-form-label">Number of parts</label>
+      <label  class="row-sm-2 col-form-label">Number of parts</label>
       <div class="row-sm-10">
-        <input type="number" class="form-control" id="inputEmail3" placeholder="">
+        <input name="num_of_parts" type="number" class="form-control"  placeholder="">
       </div>
 
-      <label for="inputEmail3" class="row-sm-2 col-form-label">Max build height </label>
+      <label  class="row-sm-2 col-form-label">Max build height </label>
       <div class="row-sm-10">
-        <input type="number" class="form-control" id="inputEmail3" placeholder="of this build job (mm)">
+        <input name="max_build_height" type="number" class="form-control"  placeholder="of this build job (mm)">
       </div>
       {# <div class="form-group row">#}
-        {# <label for="inputEmail3" class="row-sm-2 col-form-label">Number of different parts </label>#}
+        {# <label  class="row-sm-2 col-form-label">Number of different parts </label>#}
         {# <div class="col-sm-10">#}
-          {# <input type="number" class="form-control" id="inputEmail3" placeholder="">#}
+          {# <input type="number" class="form-control"  placeholder="">#}
           {# </div>#}
         {# </div>#}
     </div>
@@ -106,7 +106,7 @@
       <div class="form-group row">
         <div class="col">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck1">
+            <input name="wire_cut" class="form-check-input" type="checkbox" id="gridCheck1">
             <label class="form-check-label" for="gridCheck1">
               Wire cutting
             </label>
@@ -117,7 +117,7 @@
 
         <div class="col">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck1">
+            <input name="heat_treat" class="form-check-input" type="checkbox" id="gridCheck1">
             <label class="form-check-label" for="gridCheck1">
               Heat treatment
             </label>
