@@ -24,19 +24,19 @@ class CostEstimation:
         }
         mat_cost = material_type.__getitem__(self.m_type)
 
-        cost_part = mat_cost * self.number_of_parts * self.part_volume
-        cost_sup = mat_cost * self.number_of_parts * self.support_volume
+        cost_part = mat_cost * float(self.number_of_parts) * float(self.part_volume)
+        cost_sup = mat_cost * float(self.number_of_parts) * float(self.support_volume)
         cost_scrap = cost_part * 0.15
         cost_mat = cost_part + cost_sup + cost_scrap
 
         return cost_mat
 
     def calculate_cost_build(self):
-        if self.build_time >= 240:
-            cost_filter = 2 * self.filter_porous
-        elif self.build_time < 240:
-            cost_filter = self.filter_porous
-        cost_machine = self.build_time * self.machine_rate
+        if float(self.build_time) >= 240:
+            cost_filter = 2 * float(self.filter_porous)
+        elif float(self.build_time) < 240:
+            cost_filter = float(self.filter_porous)
+        cost_machine = float(self.build_time) * float(self.machine_rate)
         cost_build = cost_machine + cost_filter + self.cost_gas + self.cost_rl
         return cost_build
 
@@ -54,10 +54,10 @@ class CostEstimation:
         return cost_post
 
     def calculate_cost_total(self):
-        cost_mat = self.calculate_cost_material()
-        cost_build = self.calculate_cost_build()
-        cost_post = self.calculate_cost_post()
-        cost_total =  (cost_mat + cost_build + cost_post) / (1 - self.F)
+        cost_mat = float(self.calculate_cost_material())
+        cost_build = float(self.calculate_cost_build())
+        cost_post = float(self.calculate_cost_post())
+        cost_total = (cost_mat + cost_build + cost_post) / (1 - self.F)
         return cost_total
     # # cost per part
     # cost_per_part = cost_total/number_of_parts
