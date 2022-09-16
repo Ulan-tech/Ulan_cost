@@ -20,7 +20,7 @@ class CostEstimation:
             "maraging_steel": 206800 * 8.0e-6,
             "ss316l": 205000 * 8.0e-6,
             "ti_grade2": 601700 * 4.51e-6,
-            "ti64": 748000 * 4.43e-6, #it was 460000 but from KNU_Ti64 I noticed that material cost/kg is 748k
+            "ti64": 748000 * 4.43e-6 #it was 460000 but from KNU_Ti64 I noticed that material cost/kg is 748k
         }
         mat_cost = material_type.__getitem__(self.m_type)
 
@@ -41,15 +41,15 @@ class CostEstimation:
         return cost_build
 
     def calculate_cost_post(self):
-        if self.wire_cut == 'N':
-            cost_wc = 0
-        else:
+        if self.wire_cut == 'on':
             cost_wc = 200000
-
-        if self.heat_treat == 'N':
-            cost_ht = 0
         else:
+            cost_wc = 0
+
+        if self.heat_treat == 'on':
             cost_ht = 100000
+        else:
+            cost_ht = 0
         cost_post = self.cost_mp + cost_wc + cost_ht
         return cost_post
 

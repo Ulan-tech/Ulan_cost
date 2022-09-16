@@ -18,7 +18,7 @@ def cost():
         hatch_distance = request.form.get("hatch_distance")
         num_of_layers = request.form.get("num_of_layers")
         scan_speed = request.form.get("scan_speed")
-
+        layer_thickness = request.form.get("layer_thickness")
 
         build_time = request.form.get("build_time")
         number_of_parts = request.form.get("num_of_parts")
@@ -35,6 +35,7 @@ def cost():
         print("Hatch distance is ", hatch_distance)
         print("Number of layers is ", num_of_layers )
         print("Scan speed is ", scan_speed)
+        print("Layer thickness is ", layer_thickness)
 
         print("Build time is ", build_time)
 
@@ -49,41 +50,10 @@ def cost():
         print("Heat treatment?: ", heat_treat)
 
         cost_est = CostEstimation(build_time, material_type, number_of_parts, part_volume, support_volume, wire_cut, heat_treat)
-        # t = cost_est.calculate_cost_total()
+        total_cost = cost_est.calculate_cost_total()
         # CostEstimationService().create({'customer': customer, })
-        # print("Total cost is ", total_cost)
-
+        print("Total cost is ", total_cost)
     return render_template("home.html")
-
-# def calculate():
-#     cost=''
-#     if request.method=='POST' and 'customer' in request.form and 'material_type' in request.form:
-#         Customer=request.form.get('customer')
-#         Material_type=request.form.get('material_type')
-
-    #
-    #
-    # return render_template("index.html", cost=cost)
-
-
-
-
-
-
-
-
-questions = []
-@app.route('/', methods=['GET', 'POST'])
-def basic():
-    if request.method == 'POST':
-        if request.form['name'] and request.form['ques']:
-           questions.append({'name': request.form['name'], 'question': request.form['ques']})
-    return render_template('def.html', questions=questions)
-
-
-
-
-
 
 
 @app.route('/about')

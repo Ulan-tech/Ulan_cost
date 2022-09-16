@@ -6,26 +6,43 @@ class PartInfoModel:
     def __init__(self):
         self.conn = sqlite3.connect('slm.db')
 
-    def insert(self, customer, layer_thickness, part_volume, support_volume, part_surface_area, number_parts, material, final_cost):
+    def insert(self, customer, material_type, hatch_distance, num_of_layers, scan_speed, layer_thickness, build_time, number_of_parts,part_volume,support_volume,
+               surface_area, box_volume, max_build_height, wire_cut, heat_treat, total_cost):
         query = f"""insert into {self.TABLENAME} """\
                 f"""(
-                        customer, 
+                        customer,
+                        material_type,
+                        hatch_distance,
+                        num_of_layers,
+                        scan_speed, 
                         layer_thickness,
+                        build_time,
+                        number_of_parts,
                         part_volume,
                         support_volume,
-                        part_surface_area,
-                        number_parts,
-                        material,
-                        final_cost
+                        surface_area,
+                        box_volume,
+                        max_build_height,
+                        wire_cut,
+                        heat_treat,
+                        total_cost
                     ))""" \
                 f"""values ('{customer}',
-                            {layer_thickness}, 
-                            {part_volume}, 
+                            '{material_type}',
+                            {hatch_distance},
+                            {num_of_layers},
+                            {scan_speed}
+                            {layer_thickness},
+                            {build_time},
+                            {number_of_parts},
+                            {part_volume},
                             {support_volume}, 
-                            {part_surface_area}, 
-                            {number_parts}, 
-                            "{material}", 
-                            {final_cost}
+                            {surface_area}, 
+                            {box_volume}, 
+                            {max_build_height},
+                            {wire_cut},
+                            {heat_treat}, 
+                            {total_cost}
                     )"""
         
         result = self.conn.execute(query)
