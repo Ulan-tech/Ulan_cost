@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 from cost_est import CostEstimation
+from service import CostEstimationService
 from models import Schema
+import uuid
 
 app = Flask(__name__)
 app.debug = True
@@ -30,6 +32,17 @@ def cost():
         wire_cut = request.form.get("wire_cut")
         heat_treat = request.form.get("heat_treat")
 
+        if wire_cut == 'on':
+            wire_cut = 1
+        else:
+            wire_cut = 0
+        if heat_treat == 'on':
+            heat_treat = 1
+        else:
+            heat_treat = 0
+
+        build_id = 1
+
         print("Customer name is ", customer)
         print("Material type is ", material_type)
         print("Hatch distance is ", hatch_distance)
@@ -50,9 +63,30 @@ def cost():
         print("Heat treatment?: ", heat_treat)
 
         cost_est = CostEstimation(build_time, material_type, number_of_parts, part_volume, support_volume, wire_cut, heat_treat)
-        total_cost = cost_est.calculate_cost_total()
-        # CostEstimationService().create({'customer': customer, })
-        print("Total cost is ", total_cost)
+        build_cost, material_cost = cost_est.calculate_cost_build_total()
+        print("Build cost is ", build_cost)
+        print("Material cost is ", material_cost)
+
+        CostEstimationService().create({'customer': customer, 
+                                        'material_type': material_type,
+                                        'hatch_distance': hatch_distance,
+                                        'num_of_layers': num_of_layers,
+                                        'scan_speed': scan_speed,
+                                        'layer_thickness': layer_thickness,
+                                        'build_time': build_time,
+                                        'number_of_parts': number_of_parts,
+                                        'part_volume': part_volume,
+                                        'support_volume': support_volume,
+                                        'surface_area': surface_area,
+                                        'box_volume': box_volume,
+                                        'max_build_height': max_build_height,
+                                        'wire_cut': wire_cut,
+                                        'heat_treat': heat_treat,
+                                        'build_cost': build_cost,
+                                        'mat_cost': material_cost,
+                                        'build_id': build_id,
+                                        })
+        print('Saved')
     return render_template("home.html")
 
 

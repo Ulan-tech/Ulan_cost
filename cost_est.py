@@ -53,11 +53,12 @@ class CostEstimation:
         cost_post = self.cost_mp + cost_wc + cost_ht
         return cost_post
 
-    def calculate_cost_total(self):
+    def calculate_cost_build_total(self):
         cost_mat = float(self.calculate_cost_material())
         cost_build = float(self.calculate_cost_build())
         cost_post = float(self.calculate_cost_post())
-        cost_total = (cost_mat + cost_build + cost_post) / (1 - self.F)
-        return cost_total
+        cost_build_total = (cost_build + cost_post) / (1 - self.F)
+        cost_part_total = cost_mat/(1 - self.F)
+        return cost_build_total, cost_part_total
     # # cost per part
     # cost_per_part = cost_total/number_of_parts
