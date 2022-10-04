@@ -5,6 +5,12 @@ class DataInjection:
     def __init__(self):
         self.conn = sqlite3.connect('slm.db', timeout=10)
 
+    def read(self):
+        cur = self.conn.cursor()
+        res = cur.execute('select * from part_information')
+        print(res.fetchall())
+        return 0
+
     def insert(self, customer, material_type, hatch_distance, num_of_layers, scan_speed, layer_thickness, build_time, number_of_parts,part_volume,support_volume,
                surface_area, box_volume, max_build_height, wire_cut, heat_treat, build_cost, mat_cost, build_id):
         
@@ -94,9 +100,11 @@ class DataInjection:
 class CostEstimationService:
     def __init__(self):
         self.model = DataInjection()
+    
+    def read(self):
+        return self.model.read()
         
-    def create(self, 
-    params):
+    def create(self, params):
         return self.model.insert(params['customer'], 
         params['material_type'], 
         params['hatch_distance'], 
