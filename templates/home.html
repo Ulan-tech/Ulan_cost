@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>SLM cost estimation @KITECH</h1>
+<h1>L-PBF cost estimation</h1>
 <form action="{{ url_for('cost') }}" method="post">
 
   <div class="form-group row">
@@ -49,13 +49,13 @@
         <legend class="col-form-label col-sm-7.5 pt-0">Layer thickness</legend>
         <div class="row-sm-10">
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="layer_thickness" id="gridRadios1" value="0.00003" checked>
+            <input class="form-check-input" type="radio" name="layer_thickness" id="gridRadios1" value="option1" checked>
             <label class="form-check-label" for="gridRadios1">
               30um
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="layer_thickness" id="gridRadios2" value="0.00005">
+            <input class="form-check-input" type="radio" name="layer_thickness" id="gridRadios2" value="option2">
             <label class="form-check-label" for="gridRadios2">
               50um
             </label>
