@@ -41,9 +41,9 @@
       <div class="row-sm-10">
         <input name="num_of_layers" type="number" class="form-control"  placeholder=" ">
       </div>
-      <label  class="row-sm-2 col-form-label">Scan speed</label>
+      <label  class="row-sm-2 col-form-label">Max build height </label>
       <div class="row-sm-10">
-        <input name="scan_speed" type="number" class="form-control"  placeholder="mm/sec">
+        <input name="max_build_height" type="number" class="form-control"  placeholder="of this build job (mm)">
       </div>
       <fieldset class="form-group">
         <legend class="col-form-label col-sm-7.5 pt-0">Layer thickness</legend>
@@ -62,45 +62,6 @@
           </div>
         </div>
       </fieldset>
-    </div>
-
-    {# Part design feature based#}
-    <div class="col">
-      <label  class="row-sm-2 col-form-label">Part volume</label>
-      <div class="row-sm-10">
-        <input name="part_volume" type="number" class="form-control"  placeholder="mm3">
-      </div>
-      <label  class="row-sm-2 col-form-label">Support volume</label>
-      <div class="row-sm-10">
-        <input name="support_volume" type="number" class="form-control"  placeholder="mm3">
-      </div>
-      <label  class="row-sm-2 col-form-label">Bounding box volume</label>
-      <div class="row-sm-10">
-        <input name="box_volume" type="number" class="form-control"  placeholder="mm3">
-      </div>
-      <label  class="row-sm-2 col-form-label">Part surface area</label>
-      <div class="row-sm-10">
-        <input name="surface_area" type="number" class="form-control"  placeholder="mm2">
-      </div>
-      <label  class="row-sm-2 col-form-label">Number of parts</label>
-      <div class="row-sm-10">
-        <input name="num_of_parts" type="number" class="form-control"  placeholder="">
-      </div>
-
-      <label  class="row-sm-2 col-form-label">Max build height </label>
-      <div class="row-sm-10">
-        <input name="max_build_height" type="number" class="form-control"  placeholder="of this build job (mm)">
-      </div>
-      {# <div class="form-group row">#}
-        {# <label  class="row-sm-2 col-form-label">Number of different parts </label>#}
-        {# <div class="col-sm-10">#}
-          {# <input type="number" class="form-control"  placeholder="">#}
-          {# </div>#}
-        {# </div>#}
-    </div>
-
-    {# Post-processing#}
-    <div class="col">
       <div class="form-group row">
       </div>
       <div class="form-group row">
@@ -124,6 +85,46 @@
           </div>
         </div>
       </div>
+    </div>
+
+    {# Part design feature based#}
+    <div class="col">
+      <label  class="row-sm-2 col-form-label">Number of parts</label>
+      <div class="row-sm-10">
+        <input name="num_of_parts" type="number" class="form-control"  placeholder="">
+      </div>
+      <label  class="row-sm-2 col-form-label">Part volume</label>
+      <div class="row-sm-10">
+        <input name="part_volume" type="number" class="form-control"  placeholder="mm3">
+      </div>
+      <label  class="row-sm-2 col-form-label">Support volume</label>
+      <div class="row-sm-10">
+        <input name="support_volume" type="number" class="form-control"  placeholder="mm3">
+      </div>
+      <label  class="row-sm-2 col-form-label">Bounding box volume</label>
+      <div class="row-sm-10">
+        <input name="box_volume" type="number" class="form-control"  placeholder="mm3">
+      </div>
+      <label  class="row-sm-2 col-form-label">Part surface area</label>
+      <div class="row-sm-10">
+        <input name="surface_area" type="number" class="form-control"  placeholder="mm2">
+      </div>
+      <label  class="row-sm-2 col-form-label">Scan speed</label>
+      <div class="row-sm-10">
+        <input name="scan_speed" type="number" class="form-control"  placeholder="mm/sec">
+      </div>
+      
+      {# <div class="form-group row">#}
+        {# <label  class="row-sm-2 col-form-label">Number of different parts </label>#}
+        {# <div class="col-sm-10">#}
+          {# <input type="number" class="form-control"  placeholder="">#}
+          {# </div>#}
+        {# </div>#}
+    </div>
+
+    {# Post-processing#}
+    <div class="col">
+      
     </div>
   </div>
 

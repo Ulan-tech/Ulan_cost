@@ -87,6 +87,8 @@ def cost():
                                         'build_id': build_id,
                                         })
         print('Saved')
+
+        CostEstimationService().read()
     return render_template("home.html")
 
 
