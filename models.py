@@ -4,7 +4,7 @@ import sqlite3
 class Schema:
     def __init__(self):
         self.conn = sqlite3.connect('slm.db')
-        self.drop_tables()
+        # self.drop_tables()
         self.create_tables()
         # Why are we calling user table before to_do table
         # what happens if we swap them?
