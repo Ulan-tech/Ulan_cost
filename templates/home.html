@@ -1,141 +1,275 @@
+<script>
+  let parts = []
+  let build = {}
+  let count = 0
+
+  showDiv = (div_name) => {
+    document.getElementById(div_name).style.display = "block";
+  }
+
+  hideDiv = (div_name) => {
+    document.getElementById(div_name).style.display = "none";
+  }
+
+  addPart = () => {
+    const form = document.getElementById("part_form")
+    const inputs = form.elements;
+    if (form.checkValidity()) {
+      let part_parameters = {}
+
+      for (i = 0; i < inputs.length; i++) {
+        part_parameters[inputs[i].name] = inputs[i].value
+      }
+
+      parts.push(part_parameters)
+
+
+      const part_counter = document.getElementById('part_counter');
+      count++;
+      part_counter.innerHTML = count;
+
+      showDiv('counter_div')
+      form.reset()
+    }
+  }
+
+  generateCost = (part) => {
+    return [`<b>Total cost: </b><p id="total_cost">${part[2].toFixed(1).toLocaleString("en-US")} KRW</p>`,
+    `<b>${part[0]}'s cost: </b><p id="part_cost">${part[1].toFixed(1).toLocaleString("en-US")} KRW</p>`]
+  }
+  generatePartCost = (row) => {
+    return `<tr><td>${row[0]}</td><td>${row[1].toFixed(1).toLocaleString("en-US")} KRW</td></tr>`
+  }
+  generateTotalCost = (row) => {
+    return `<tr><td>Total</td><td>${row[2].toFixed(1).toLocaleString("en-US")} KRW</td></tr>`
+  }
+
+  sendData = () => {
+    const form = document.getElementById("build_form")
+    const inputs = form.elements;
+    if (form.checkValidity() && parts && parts.length > 0) {
+      let buildDetails = {}
+
+      for (i = 0; i < inputs.length; i++) {
+        if (inputs[i].name === 'layer_thickness' && !inputs[i].checked) {
+          continue
+        }
+        else if (inputs[i].name === 'wire_cut' || inputs[i].name === 'heat_treat') {
+          buildDetails[inputs[i].name] = inputs[i].checked
+        }
+        else {
+          buildDetails[inputs[i].name] = inputs[i].value
+        }
+      }
+
+      build = buildDetails
+
+      $.ajax({
+        type: "POST",
+        url: "/cost",
+        contentType: "application/json",
+        data: JSON.stringify({
+          parts: parts,
+          build: build
+        }),
+        dataType: "json",
+        success: function (response) {
+          let part_costs_html = ''
+          let total_cost_html = ''
+
+          // if (response && response['parts']) {
+          //   response['parts'].forEach((part) => {
+          //     const costs_html = generateCost(part)
+          //     total_cost_html = costs_html[0]
+          //     const part_cost_html = costs_html[1]
+          //     part_costs_html += part_cost_html
+          //   })
+          // }
+          if (response && response['parts']) {
+            response['parts'].forEach((part) => {
+              // const costs_html = generateCost(part)
+              total_cost_html = generateTotalCost(part)
+              const part_cost_html = generatePartCost(part)
+              part_costs_html += part_cost_html
+            })
+          }
+          table_html = '<thead><tr><th scope="col">Name</th><th scope="col">Cost</th></tr></thead><tbody>' + part_costs_html + total_cost_html + '</tbody>'
+          document.getElementById('costs_div').innerHTML = table_html
+
+          showDiv('costs_div')
+        },
+        error: function (err) {
+          console.log(err);
+        }
+      });
+      hideDiv('counter_div')
+
+      build = []
+      parts = []
+      count = 0
+
+      form.reset()
+    }
+  }
+</script>
+
 {% extends "layout.html" %}
+
 {% block content %}
+
 <h1>SLM cost estimation @KITECH</h1>
-<form action="{{ url_for('cost') }}" method="post">
+<p><span class="required">*</span> - Required field</p>
 
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Customer</label>
-    <div class="col-sm-5">
-      <input name="customer" class="form-control" placeholder="Please write your name">
+<div class="row">
+  <form id="build_form" class="col">
+    <div class="row align-items-center form-group">
+      <label class="col-sm-3 col-form-label">Customer <span class="required">*</span></label>
+      <div class="col-sm-8">
+        <input name="customer" class="form-control" placeholder="Please enter your name" required>
+      </div>
     </div>
-  </div>
-  <div class="form-group row align-items-center">
-    <label  class="col-sm-2 col-form-label">Material Type</label>
-    <div class="col-auto my-1">
-      <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Preference</label>
-      <select name="material_type" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-        <option selected>Material type...</option>
-        <option value="inconel">Inconel</option>
-        <option value="maraging_steel">Maraging steel</option>
-        <option value="ss316l">SS316L</option>
-        <option value="ti_grade2">Ti Grade 2</option>
-        <option value="ti64">Ti6Al4V</option>
-      </select>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Overall Build Time</label>
-    <div class="col-sm-5">
-      <input name="build_time" type="number" class="form-control" placeholder="">
-    </div>
-  </div>
 
-  {# Process parameter based#}
-  <div class="form-group row">
-    <div class="col">
-      <label class="row-sm-2 col-form-label">Hatch distance</label>
-      <div class="row-sm-10">
-        <input name="hatch_distance" type="number" class="form-control"  placeholder="in microns">
+    <div class="row align-items-center form-group">
+      <label class="col-sm-4">Material Type <span class="required">*</span></label>
+      <div class="col-sm-7">
+        <select name="material_type" class="custom-select" required>
+          <option selected>Material type...</option>
+          <option value="inconel">Inconel</option>
+          <option value="maraging_steel">Maraging steel</option>
+          <option value="ss316l">SS316L</option>
+          <option value="ti_grade2">Ti Grade 2</option>
+          <option value="ti64">Ti6Al4V</option>
+        </select>
       </div>
-      <label  class="row-sm-2 col-form-label">Number of layers</label>
-      <div class="row-sm-10">
-        <input name="num_of_layers" type="number" class="form-control"  placeholder=" ">
+    </div>
+
+    <div class="row align-items-center form-group">
+      <label class="col-sm-4">Overall Build Time <span class="required">*</span></label>
+      <div class="col-sm-7">
+        <input name="build_time" type="number" class="form-control" placeholder="in hours" required>
       </div>
-      <label  class="row-sm-2 col-form-label">Max build height </label>
+    </div>
+    <label class="row-sm-2">Hatch distance</label>
+    <div class="row-sm-10">
+      <input name="hatch_distance" type="number" class="form-control" placeholder="in microns">
+    </div>
+
+    <label class="row-sm-2">Number of layers</label>
+    <div class="row-sm-10">
+      <input name="num_of_layers" type="number" class="form-control" placeholder=" ">
+    </div>
+
+    <label class="row-sm-2">Max build height </label>
+    <div class="row-sm-10">
+      <input name="max_build_height" type="number" class="form-control" placeholder="of this build job (mm)">
+    </div>
+    <label class="row-sm-2 col-form-label">Scan speed</label>
+    <div class="row-sm-10">
+      <input name="scan_speed" type="number" class="form-control" placeholder="mm/sec">
+    </div>
+    <fieldset class="form-group">
+
+      <label class="row-sm-2">Layer thickness</label>
       <div class="row-sm-10">
-        <input name="max_build_height" type="number" class="form-control"  placeholder="of this build job (mm)">
-      </div>
-      <fieldset class="form-group">
-        <legend class="col-form-label col-sm-7.5 pt-0">Layer thickness</legend>
-        <div class="row-sm-10">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="layer_thickness" id="gridRadios1" value="0.00003" checked>
-            <label class="form-check-label" for="gridRadios1">
-              30um
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="layer_thickness" id="gridRadios2" value="0.00005">
-            <label class="form-check-label" for="gridRadios2">
-              50um
-            </label>
-          </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="layer_thickness" value="0.00003" checked>
+          <label class="form-check-label">
+            30um
+          </label>
         </div>
-      </fieldset>
-      <div class="form-group row">
-      </div>
-      <div class="form-group row">
-        <div class="col">
-          <div class="form-check">
-            <input name="wire_cut" class="form-check-input" type="checkbox" id="gridCheck1">
-            <label class="form-check-label" for="gridCheck1">
-              Wire cutting
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="form-group row">
 
-        <div class="col">
-          <div class="form-check">
-            <input name="heat_treat" class="form-check-input" type="checkbox" id="gridCheck1">
-            <label class="form-check-label" for="gridCheck1">
-              Heat treatment
-            </label>
-          </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="layer_thickness" value="0.00005">
+          <label class="form-check-label">
+            50um
+          </label>
+        </div>
+
+      </div>
+
+    </fieldset>
+
+    <div class="row">
+      <div class="col">
+        <div class="form-check">
+          <input name="wire_cut" class="form-check-input" type="checkbox" va>
+          <label class="form-check-label">
+            Wire cutting <span class="required">*</span>
+          </label>
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-check">
+          <input name="heat_treat" class="form-check-input" type="checkbox">
+          <label class="form-check-label">
+            Heat treatment <span class="required">*</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </form>
 
-    {# Part design feature based#}
+  <form id="part_form" class="col" novalidate>
     <div class="col">
-      <label  class="row-sm-2 col-form-label">Number of parts</label>
+      <label class="row-sm-2 col-form-label">Part Name <span class="required">*</span></label>
       <div class="row-sm-10">
-        <input name="num_of_parts" type="number" class="form-control"  placeholder="">
+        <input name="part_name" class="form-control" placeholder="Please enter name of the part" required>
       </div>
-      <label  class="row-sm-2 col-form-label">Part volume</label>
+      <label class="row-sm-2 col-form-label">Number of parts <span class="required">*</span></label>
       <div class="row-sm-10">
-        <input name="part_volume" type="number" class="form-control"  placeholder="mm3">
+        <input name="number_of_parts" type="number" class="form-control" placeholder="" required>
       </div>
-      <label  class="row-sm-2 col-form-label">Support volume</label>
+      <label class="row-sm-2 col-form-label">Part volume <span class="required">*</span></label>
       <div class="row-sm-10">
-        <input name="support_volume" type="number" class="form-control"  placeholder="mm3">
+        <input name="part_volume" type="number" class="form-control" placeholder="mm3" required>
       </div>
-      <label  class="row-sm-2 col-form-label">Bounding box volume</label>
+      <label class="row-sm-2 col-form-label">Support volume <span class="required">*</span></label>
       <div class="row-sm-10">
-        <input name="box_volume" type="number" class="form-control"  placeholder="mm3">
+        <input name="support_volume" type="number" class="form-control" placeholder="mm3" required>
       </div>
-      <label  class="row-sm-2 col-form-label">Part surface area</label>
+      <label class="row-sm-2 col-form-label">Bounding box volume</label>
       <div class="row-sm-10">
-        <input name="surface_area" type="number" class="form-control"  placeholder="mm2">
+        <input name="box_volume" type="number" class="form-control" placeholder="mm3">
       </div>
-      <label  class="row-sm-2 col-form-label">Scan speed</label>
+      <label class="row-sm-2 col-form-label">Part surface area</label>
       <div class="row-sm-10">
-        <input name="scan_speed" type="number" class="form-control"  placeholder="mm/sec">
+        <input name="surface_area" type="number" class="form-control" placeholder="mm2">
       </div>
-      
-      {# <div class="form-group row">#}
-        {# <label  class="row-sm-2 col-form-label">Number of different parts </label>#}
-        {# <div class="col-sm-10">#}
-          {# <input type="number" class="form-control"  placeholder="">#}
-          {# </div>#}
-        {# </div>#}
+      <div style="display:none" id="counter_div">
+        <!-- <b>Number of different parts:</b><p id="part_counter" value="0">-</p> -->
+        <label class="row-sm-2 col-form-label"><b>Number of different parts:</b>
+          <p id="part_counter" value="0">-</p>
+        </label>
+      </div>
     </div>
+  </form>
+</div>
 
-    {# Post-processing#}
-    <div class="col">
-      
-    </div>
+<div class="row">
+  <div class="col">
+    <button onclick="sendData()" type="button" class="btn btn-primary">Calculate</button>
   </div>
+  <div class="col">
+    <button onclick="addPart()" type="button" class="btn btn-primary">Add Part</button>
+  </div>
+</div>
 
-  <div class="form-group row align-items-center">
-    <div class="col-sm-1">
-      <button type="submit" class="btn btn-primary">Add Part</button>
-    </div>
-    <div class="col-sm-1">
-      <button type="submit" class="btn btn-primary">Calculate</button>
-    </div>
+<!-- <div style="display:none" id="costs_div">
+</div> -->
+<div class="row">
+  <div class="col">
+
+    <table style="display:none" id="costs_div" class="table table-striped">
+
+      <!-- <tbody style="display:none" id="costs_div">
+    
+      </tbody> -->
+    </table>
   </div>
-</form>
+  <div class="col"></div>
+</div>
+
 
 {% endblock content %}
