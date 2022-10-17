@@ -1,0 +1,19 @@
+<html>
+    <body>
+        <form action = "/" method="POST">
+        Customer
+        <input type=""text" name="customer"><br>
+        Material_type
+        <input type=""text" name="material_type"<br>
+        t_build
+        <input type=""text" name="material_type"<br>
+
+
+        <button type ="submit" value=""submit">Calculate</button>
+
+        </form>
+        {%if cost%}
+        <p> The final cost is {{ cost }}</p>
+        {% endif %}
+    </body>
+</html>
