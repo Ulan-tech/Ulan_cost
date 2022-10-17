@@ -4,8 +4,8 @@ body {
   margin-top: 5rem;
 }
 
-.form-group .form-control {
-  padding: 100;
+.required {
+  color: red;
 }
 
 .hidden {
