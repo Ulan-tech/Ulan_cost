@@ -16,7 +16,8 @@ class PartsAndBuilds:
             SELECT 
                 p.part_name,
                 p.part_cost, 
-                b.total_cost 
+                b.total_cost,
+                p.number_of_parts
             FROM 
                 parts as p 
             JOIN 

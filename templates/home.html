@@ -33,15 +33,19 @@
     }
   }
 
+  numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   generateCost = (part) => {
     return [`<b>Total cost: </b><p id="total_cost">${part[2].toFixed(1).toLocaleString("en-US")} KRW</p>`,
     `<b>${part[0]}'s cost: </b><p id="part_cost">${part[1].toFixed(1).toLocaleString("en-US")} KRW</p>`]
   }
   generatePartCost = (row) => {
-    return `<tr><td>${row[0]}</td><td>${row[1].toFixed(1).toLocaleString("en-US")} KRW</td></tr>`
+    return `<tr><td>${row[0]}</td><td>${numberWithCommas(row[1].toFixed(1))} KRW</td><td>${numberWithCommas((row[1]/row[3]).toFixed(1))} KRW</td></tr>`
   }
   generateTotalCost = (row) => {
-    return `<tr><td>Total</td><td>${row[2].toFixed(1).toLocaleString("en-US")} KRW</td></tr>`
+    return `<tr><td>Total</td><td>${numberWithCommas(row[2].toFixed(1))} KRW</td></tr>`
   }
 
   sendData = () => {
@@ -93,7 +97,7 @@
             part_costs_html += part_cost_html
           })
         }
-        table_html = '<thead><tr><th scope="col">Name</th><th scope="col">Cost</th></tr></thead><tbody>' + part_costs_html + total_cost_html + '</tbody>'
+        table_html = '<thead><tr><th scope="col">Name</th><th scope="col">Cost</th><th scope="col">Cost Per Part</th></tr></thead><tbody>' + part_costs_html + total_cost_html + '</tbody>'
         document.getElementById('costs_div').innerHTML = table_html
 
         showDiv('costs_div')
@@ -258,6 +262,8 @@
 
 <!-- <div style="display:none" id="costs_div">
 </div> -->
+<div class="row">
+</div>
 <div class="row">
   <div class="col">
 
