@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from cost_est import CostEstimation
-from service import CostEstimationService
+from service import DataInjection
 from models import Schema
+from datetime import datetime
 import uuid
 
 app = Flask(__name__)
@@ -14,82 +15,48 @@ def home():
 @app.route('/cost', methods =["GET", "POST"])
 def cost():
     if request.method == "POST":
-       # getting input with name = fname in HTML form
-        customer = request.form.get("customer")
-        material_type = request.form.get("material_type")
-        hatch_distance = request.form.get("hatch_distance")
-        num_of_layers = request.form.get("num_of_layers")
-        scan_speed = request.form.get("scan_speed")
-        layer_thickness = request.form.get("layer_thickness")
+        data = request.get_json()
 
-        build_time = request.form.get("build_time")
-        number_of_parts = request.form.get("num_of_parts")
-        part_volume = request.form.get("part_volume")
-        support_volume = request.form.get("support_volume")
-        surface_area = request.form.get("surface_area")
-        box_volume = request.form.get("box_volume")
-        max_build_height = request.form.get("max_build_height")
-        wire_cut = request.form.get("wire_cut")
-        heat_treat = request.form.get("heat_treat")
+        parts = data['parts']
+        build = data['build']
 
-        if wire_cut == 'on':
-            wire_cut = 1
-        else:
-            wire_cut = 0
-        if heat_treat == 'on':
-            heat_treat = 1
-        else:
-            heat_treat = 0
+        build_id = int(datetime.now().timestamp()*1000)
+        print(parts, "PARTS")
+        print(build, "BUILD\n", build_id)
+        cost_est = CostEstimation(parts, build)
+ 
+        final_parts_cost, total_cost = cost_est.get_costs()
 
-        build_id = 1
+        data_injection = DataInjection(build_id) 
 
-        print("Customer name is ", customer)
-        print("Material type is ", material_type)
-        print("Hatch distance is ", hatch_distance)
-        print("Number of layers is ", num_of_layers )
-        print("Scan speed is ", scan_speed)
-        print("Layer thickness is ", layer_thickness)
-
-        print("Build time is ", build_time)
-
-        print("Number of parts is ", number_of_parts)
-        print("Part volume is ", part_volume)
-        print("Support volume is ", support_volume)
-        print("Surface area is ", surface_area)
-        print("Bounding box volume is ", box_volume)
-        print("Max build height is ", max_build_height)
-
-        print("Use wire cut?:  ", wire_cut)
-        print("Heat treatment?: ", heat_treat)
-
-        cost_est = CostEstimation(build_time, material_type, number_of_parts, part_volume, support_volume, wire_cut, heat_treat)
-        build_cost, material_cost = cost_est.calculate_cost_build_total()
-        print("Build cost is ", build_cost)
-        print("Material cost is ", material_cost)
-
-        CostEstimationService().create({'customer': customer, 
-                                        'material_type': material_type,
-                                        'hatch_distance': hatch_distance,
-                                        'num_of_layers': num_of_layers,
-                                        'scan_speed': scan_speed,
-                                        'layer_thickness': layer_thickness,
-                                        'build_time': build_time,
-                                        'number_of_parts': number_of_parts,
-                                        'part_volume': part_volume,
-                                        'support_volume': support_volume,
-                                        'surface_area': surface_area,
-                                        'box_volume': box_volume,
-                                        'max_build_height': max_build_height,
-                                        'wire_cut': wire_cut,
-                                        'heat_treat': heat_treat,
-                                        'build_cost': build_cost,
-                                        'mat_cost': material_cost,
-                                        'build_id': build_id,
-                                        })
-        print('Saved')
-
-        CostEstimationService().read()
-    return render_template("home.html")
+        for idx, part in enumerate(parts):
+            data_injection.insert_part_details({
+                                        'part_name': part['part_name'],
+                                        'material_type': build['material_type'],
+                                        'number_of_parts': part['number_of_parts'],
+                                        'part_volume': part['part_volume'],
+                                        'support_volume': part['support_volume'],
+                                        'surface_area': part['surface_area'] or ':null',
+                                        'box_volume': part['box_volume'] or ':null',
+                                        'part_cost': final_parts_cost[idx],
+                                        'build_id': build_id})
+        data_injection.insert_build_details({
+                                        'customer': build['customer'], 
+                                        'material_type': build['material_type'],
+                                        'hatch_distance': build['hatch_distance'] or ':null',
+                                        'num_of_layers': build['num_of_layers'] or ':null',
+                                        'layer_thickness': build['layer_thickness'] or ':null',
+                                        'build_time': build['build_time'],
+                                        'max_build_height': build['max_build_height'] or ':null',
+                                        'scan_speed': build['scan_speed'] or ':null',
+                                        'wire_cut': build['wire_cut'],
+                                        'heat_treat': build['heat_treat'],
+                                        'build_cost': total_cost,
+                                        'total_cost': total_cost,
+                                        'build_id': build_id})
+        parts_cost = data_injection.read()
+        print(parts_cost)        
+        return jsonify(parts=parts_cost)
 
 
 @app.route('/about')
