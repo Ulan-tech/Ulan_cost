@@ -55,7 +55,7 @@ class CostEstimation:
 
         for part in self.parts:
             cost_mat = float(self.calculate_cost_material(part))
-            parts_volume += float(part['number_of_parts']) * (float(part['part_volume']) + float(part['support_volume']))
+            parts_volume += int(part['number_of_parts']) * (float(part['part_volume']) + float(part['support_volume']))
             cost_parts.append(cost_mat)
 
         cost_build = float(self.calculate_cost_build())
@@ -64,7 +64,7 @@ class CostEstimation:
         total_cost = (cost_build + cost_post + sum(cost_parts)) / (1 - self.F)
 
         for part in self.parts:
-            cost_part = ((float(part['number_of_parts']) * (float(part['part_volume']) + float(part['support_volume']))) / parts_volume) * total_cost
+            cost_part = ((int(part['number_of_parts']) * (float(part['part_volume']) + float(part['support_volume']))) / parts_volume) * total_cost
             final_cost_parts.append(cost_part)
         
         return final_cost_parts, total_cost
