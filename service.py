@@ -1,18 +1,10 @@
-from functools import total_ordering
-import sqlite3
-
 class PartsAndBuilds:
-    def __init__(self):
-        self.conn = sqlite3.connect('slm.db')
-        self.cur = self.conn.cursor()
+    def __init__(self, conn):
+        self.conn = conn
+        self.cursor = self.conn.cursor()
     
     def read(self, build_id):
-        # res = self.cur.execute(f"""
-        #     SELECT 
-        #         *
-        #     FROM parts
-        #     """)
-        res = self.cur.execute(f"""
+        self.cursor.execute(f"""
             SELECT 
                 p.part_name,
                 p.part_cost, 
@@ -27,7 +19,11 @@ class PartsAndBuilds:
             WHERE 
                 b.build_id = {build_id}
             """)
-        parts = res.fetchall()
+
+        self.conn.commit()
+
+        parts = self.cursor.fetchall()
+
         return parts
 
     def insertPart(self, part_name, material_type, number_of_parts, part_volume, support_volume, surface_area, box_volume, part_cost, build_id):
@@ -43,19 +39,34 @@ class PartsAndBuilds:
                         part_cost,
                         build_id
                     )""" \
-                f""" values('{part_name}',
-                            '{material_type}',
-                            {number_of_parts},
-                            {part_volume},
-                            {support_volume}, 
-                            {surface_area}, 
-                            {box_volume}, 
-                            {part_cost},
-                            {build_id}
+                f""" values(
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s
                     )"""
-        print(part_query)
-        return self.cur.execute(part_query, {'null':None})
-         
+        query = self.cursor.mogrify(part_query, (part_name,
+                                        material_type,
+                                        number_of_parts,
+                                        part_volume,
+                                        support_volume, 
+                                        surface_area, 
+                                        box_volume, 
+                                        part_cost,
+                                        build_id)
+                            )
+        print(query)
+        self.cursor.execute(query)
+
+        self.conn.commit()
+
+        return
+
     def insertBuild(self, build_id, customer, material_type, hatch_distance, num_of_layers, layer_thickness, build_time, max_build_height, scan_speed, wire_cut, heat_treat, build_cost, total_cost):
         build_query = f"""insert into builds """\
                 f"""(
@@ -73,26 +84,47 @@ class PartsAndBuilds:
                         build_cost,
                         total_cost
                     )""" \
-                f""" values({build_id},
-                            '{customer}',
-                            '{material_type}',
-                            {hatch_distance},
-                            {num_of_layers},
-                            {layer_thickness},
-                            {build_time},
-                            {max_build_height},
-                            {scan_speed},
-                            {wire_cut},
-                            {heat_treat},
-                            {build_cost},
-                            {total_cost}
+                f""" values(
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s, 
+                        %s,
+                        %s,
+                        %s,
+                        %s
                     )"""
         print(build_query)
-        return self.cur.execute(build_query, {'null':None})
+        query = self.cursor.mogrify(build_query, (
+                                build_id,
+                                customer,
+                                material_type,
+                                hatch_distance,
+                                num_of_layers,
+                                layer_thickness,
+                                build_time,
+                                max_build_height,
+                                scan_speed,
+                                wire_cut,
+                                heat_treat,
+                                build_cost,
+                                total_cost)
+                            )
+        print(query)
+        self.cursor.execute(query)
+
+        self.conn.commit()
+
+        return
    
 class DataInjection:
-    def __init__(self, build_id):
-        self.model = PartsAndBuilds()
+    def __init__(self, conn, build_id):
+        self.model = PartsAndBuilds(conn)
         self.build_id = build_id
     
     def read(self):
