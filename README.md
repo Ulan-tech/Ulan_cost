@@ -11,5 +11,7 @@ Second, a cost per part was found by using the volume ratio of the number of a p
 <br>
 $$C_{i} = C_{total}\dfrac{n_{i}V_{i}}{\sum_{j=1}n_{j}V{_j}}$$
 
+Lastly, a webservice was implemented via using Python Flask.
+It can be provided upon request
 
 
